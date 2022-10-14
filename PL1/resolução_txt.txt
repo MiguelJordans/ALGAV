@@ -1,0 +1,120 @@
+PL1 - ALGAV
+
+Notas: 
+
+	e -> ','
+	ou -> ';'
+	not -> '+\'
+
+ex01) consult('DB_PL1.pl')
+	
+	pais(P, europa, _). -> Dá o resultado de todos os países da Europa
+	pais(P, portugal, _). -> Dá false, pois não definimos um facto em que portugal fosse um Continente
+	pais(P, europa, pop). -> Dá 2 outputs, todos os países e a população de cada um
+
+
+ex02)
+	fronteira(franca,espanha). -> Dá false
+	fronteira(espanha,franca). -> Dá true, porque estava ao contrário (A ordem os elementos é importante)
+
+	
+	pais(mexico,_,Pop). -> Dá a população do México, Pop = 129.2
+
+ex03
+
+	a)
+
+	vizinho(P1,P2):-
+	fronteira(P1,P2);
+	fronteira(P2,P1).
+	
+	Fazer isto na BD!
+	Verificar as 2 condições com um 'ou'
+
+
+	b) 
+
+	contSemPaises(C):-
+	continente(C),\+
+	pais(_,C,_).
+
+	Verificar todos os continentes primeiro, dps verificar qual não tem paises
+
+	c)
+
+	semVizinhos(L):-
+	pais(L,_,_), \+(
+	fronteira(L, _);
+	fronteira(_,L)).
+
+	Primeiro verificar todos os países, dps, fazer um 'e' e um 'not' para obter APENAS os países que não tem fronteiras
+
+	d)
+
+	chegoLaFacil(P1,P2):-
+vizinho(P1,P2);(
+    vizinho(P1,X),
+    vizinho(P2,X),
+P1\==P2).
+
+
+	Verificar primeiro, se os 2 países são vizinhos, se não, verificar por subistituição, usamos um X para obter todos os vizinhos de P1, e dps de P2 com X, caso algum seja igual entre os dois vai dar true
+
+
+ex04
+
+	a)
+
+	potencia(_,0,1):-!.
+	potencia(B,E,P):-
+ 	 E>0,
+ 	 E1 is E-1,
+ 	 potencia(B,E1,R1),
+ 	 P is B*R1,!.
+	potencia(B,E,P):-
+ 	 E1 is E+1,
+  	 potencia(B,E1,R1),
+  	 P is (1/B)*R1.
+
+	Verificar a primeira condição com o '!', o cut, no caso da potencia, tanto pode haver a potencia positiva como negativa então temos de fazer 2 predicados, caso o expoente seja positivo temos de ir reduzindo até chegar a 0, condição base E = 0, e vamos de forma recursiva decrementando até chegarmos a 0, quase chegarmos a 0 vamos substituir o valor
+
+	b)
+
+	fatorial(0,1):-!.
+	fatorial(N,F):-
+ 	 N > 0,
+  	 N1 is N-1,
+ 	 fatorial(N1,F1),
+ 	 F is N*F1.
+	fatorial(N,F):-
+  	 N1 is N+1,
+  	 fatorial(N1,F1),
+ 	 F is N*F1.
+
+
+	c)
+
+	somatorio(K,K,P):- P is K,!.
+	somatorio(J,K,P):-
+ 	 J < K,
+ 	 J1 is J+1,
+ 	 somatorio(J1,K,P1),
+ 	 P is P1+J1.
+	somatorio(J,K,P):-
+ 	 J > K,
+	 J1 is J-1,
+ 	 somatorio(J1,K,P1),
+ 	 P is P1+J.
+
+	Resolução Professora:
+
+	somatorio(J,K,S)
+	
+	somatorio(K,K,K):-!
+	somatorio(J,K,S):- J < K, !, J1 is J+1, somatorio(J1,K,S1), S is J+S1.
+	somatorio(J,K,S):- somatorio(K,J,S).
+
+
+
+	
+
